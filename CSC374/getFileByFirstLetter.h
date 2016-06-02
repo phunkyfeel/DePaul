@@ -33,4 +33,5 @@
 #define		NO_MATCH_CODE		((uint32_t) -1)
 #define		CANT_READ_FILE_CODE	((uint32_t) -2)
 #define		CANT_READ_DIR_CODE	((uint32_t) -3)
-#define		DEFAULT_HOSTNAME	"server.gentech.private" //Had to change default hostname to match my computer
+#define     DEFAULT_HOSTNAME    "localhost.localdomain"
+//#define		DEFAULT_HOSTNAME	"server.gentech.private" //Had to change default hostname to match my computer

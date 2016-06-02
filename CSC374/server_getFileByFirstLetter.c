@@ -1,3 +1,6 @@
+/*  HAD TO MODIFY DEFAULT_HOSTNAME IN HEADER FILE TO WORK ON MY MAC COMPUTER/SERVER   */
+/*  HAD TO CHANGE INCLUDE OF WAIT.H TO SYS/WAIT.H BECAUSE MY COMPUTER COULD NOT FIND THE DIRECTORY OTHERWISE   */
+
 //server_getFileByFirstLetter.c
 //
 //Clayton Cohn
@@ -10,8 +13,6 @@
 #include	<sys/wait.h>	// For waitpid()
 #include	<dirent.h>		// For opendir(), readdir(), closedir()
 #include    <unistd.h>      // Had to include for R_OK permission
-
-//HAD TO MODIFY WAIT.H INCLUDE FOR MY MAC
 
 const int LO_LEGAL_PORT = 1025;
 const int HI_LEGAL_PORT = 65535;
@@ -52,7 +53,7 @@ int getServerFileDescriptor(int port, const char* progName) {
 	serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	int open = 1;
     
-	setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &open, sizeof(int));
+	//setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &open, sizeof(int));
     
 	if(serverSocket < 0) {
 		perror("Unable to open server socket.");
@@ -175,7 +176,7 @@ void handleClient(int fd) {
 				return;
 			} else foundFile = 1;
 		} else {
-			response = htonl(NO_MATCH_CODE);
+			response = htonl(CANT_READ_DIR_CODE);
 			write(fd, &response, sizeof(response));
 			printf("%c is the right character but it's not a file.\n",buffer[0]);
 			printf("No matching file.\n");
@@ -235,20 +236,19 @@ void doServer(int listenFd) {
 	}
     
 	//  II.  Do the work of the server:
-    listen(listenFd,NUM_CLIENTS_TO_SERVE);
+    listen(listenFd, NUM_CLIENTS_TO_SERVE);
 	int i, clientLen;
 	pid_t zombieChildProcess;
 	int clientFd;
-	struct sockaddr_in clientAddr;
     
     for  (i = 0;  i < NUM_CLIENTS_TO_SERVE;  i++) {
         
 		//  YOUR CODE HERE
-		if((clientFd = accept(listenFd, (struct sockaddr *)&clientAddr, &clientLen)) < 0) {
+		if ((clientFd = accept(listenFd, NULL, NULL)) < 0) {
 			if (errno == EINTR) continue;
 			else perror("Could not accept request from client.\n");
 		} else {
-			if(0 == (zombieChildProcess = fork())) {
+			if ((zombieChildProcess = fork()) == 0) {
 				handleClient(clientFd);
 				close(clientFd);
 				exit(0);
