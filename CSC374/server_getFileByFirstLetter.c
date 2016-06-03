@@ -1,4 +1,3 @@
-/*  HAD TO MODIFY DEFAULT_HOSTNAME IN HEADER FILE TO WORK ON MY MAC COMPUTER/SERVER   */
 /*  HAD TO CHANGE INCLUDE OF WAIT.H TO SYS/WAIT.H BECAUSE MY COMPUTER COULD NOT FIND THE DIRECTORY OTHERWISE   */
 
 //server_getFileByFirstLetter.c
@@ -41,59 +40,52 @@ void sigChildHandler(int sig) {
 //	to the OS telling this server when a client process has connect()-ed
 //	to 'port'.  Returns that file-descriptor, or 'ERROR_FD' on failure.
 int getServerFileDescriptor(int port, const char* progName) {
-	//  I.  Application validity check:
-    
-	int serverSocket;
-	struct sockaddr_in serverAddr;
-	if (progName == NULL) {
-		fprintf(stderr, "Error: File descriptor is NULL.\n");
-		exit(EXIT_FAILURE);
-	}
-
-	serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-	int open = 1;
-    
-	//setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &open, sizeof(int));
-    
-	if(serverSocket < 0) {
-		perror("Unable to open server socket.");
-		exit(EXIT_FAILURE);
-	}
-    
-	//  II.  Attempt to get socket file descriptor and bind it to 'port':
-
-	//  YOUR CODE HERE
-	memset(&serverAddr, 0 , sizeof(serverAddr));    //Bind host address
-	serverAddr.sin_addr.s_addr = INADDR_ANY;
-	serverAddr.sin_port = htons(port);
-	serverAddr.sin_family = AF_INET;
-
-    if (bind(serverSocket, (struct sockaddr *) &serverAddr, sizeof(serverAddr)) < 0) {
-	  perror("Error: Unable to bind file descriptor to port.");
-	  exit(EXIT_FAILURE);
+    //  I.  Application validity check:
+    if  (progName == NULL) {
+        fprintf(stderr,"Error: NULL ptr to file descriptor.\n");
+        exit(EXIT_FAILURE);
     }
-
-	//  III.  Finished:
-	return (serverSocket);
+    
+    //  II.  Attempt to get socket file descriptor and bind it to 'port':
+    //  YOUR CODE HERE
+    
+    int socketDesc = socket(AF_INET, /*AF_INET domain*/ SOCK_STREAM, /*Reliable TCP*/ 0); //Create socket
+    struct sockaddr_in socketInf;  //Make sockaddr_in struct
+    memset(&socketInf,'\0',sizeof(socketInf));    //Populate with zeroes
+    socketInf.sin_family = AF_INET;     //Using TCP/IP
+    socketInf.sin_port = htons(port);   //Let port know in network endian
+    socketInf.sin_addr.s_addr = INADDR_ANY; //Allow machine to connect
+    int status = bind(socketDesc, (struct sockaddr*)&socketInf, sizeof(socketInf)); //Bind socket with port
+    
+    if  (status < 0) {
+        fprintf(stderr,"Error: Could not bind to port %d\n",port);
+        exit(EXIT_FAILURE);
+    }
+    
+    listen(socketDesc, 5);
+    
+    //  III.  Finished:
+    
+    return(socketDesc);
 }
 
 //  PURPOSE:  To install 'sigChildHandler()' as the signal simple handler for
 //	the 'SIGCHLD' signal.  Tells OS to restarts system calls if receives
 //	'SIGCHLD'.
 void installSigChildHandler() {
-	//  I.  Application validity check:
+    //  I.  Application validity check:
 
-	//  II.  Install 'sigChildHandler()' as the 'SIGCHLD' handler:
-	//  YOUR CODE HERE
-    struct sigaction action;
-
-    sigemptyset(&action.sa_mask);
-	action.sa_flags = 0;
-	action.sa_handler = sigChildHandler;
-
-	sigaction(SIGCHLD, &action, NULL);
-
-	//  III.  Finished:
+    //  II.  Install 'sigChildHandler()' as the 'SIGCHLD' handler:
+    //  YOUR CODE HERE
+    
+    struct sigaction actn;                           //Make new action struct
+    memset(&actn,'\0',sizeof(struct sigaction));
+    sigemptyset(&actn.sa_mask);
+    actn.sa_flags = SA_NOCLDSTOP | SA_RESTART;;
+    actn.sa_handler = sigChildHandler;
+    sigaction(SIGCHLD,&actn,NULL);  //Install 'sigChildHandler()' as 'SIGCHLD' handler
+    
+    //  III.  Finished:
 }
 
 //  PURPOSE:  To ask the user which port to attempt to monopolize, and to return
@@ -106,7 +98,6 @@ int getPort() {
 
 	do {
 		char buffer[BUFFER_LEN];
-
 		printf("Please enter port number to monopolize [%d-%d]: ", LO_LEGAL_PORT, HI_LEGAL_PORT);
 		fgets(buffer, BUFFER_LEN, stdin);
 		port = strtol(buffer, NULL, 10);
@@ -176,13 +167,12 @@ void handleClient(int fd) {
 				return;
 			} else foundFile = 1;
 		} else {
-			response = htonl(CANT_READ_DIR_CODE);
+            response = htonl(CANT_READ_DIR_CODE);   //Send CANT_READ_DIR_CODE back to client
 			write(fd, &response, sizeof(response));
 			printf("%c is the right character but it's not a file.\n",buffer[0]);
 			printf("No matching file.\n");
 			return;
 		}
-
 	} else {
 		response = htonl(NO_MATCH_CODE);            //Send NO_MATCH_CODE to client
 		write(fd, &response, sizeof(response));
@@ -244,6 +234,7 @@ void doServer(int listenFd) {
     for  (i = 0;  i < NUM_CLIENTS_TO_SERVE;  i++) {
         
 		//  YOUR CODE HERE
+        
 		if ((clientFd = accept(listenFd, NULL, NULL)) < 0) {
 			if (errno == EINTR) continue;
 			else perror("Could not accept request from client.\n");
