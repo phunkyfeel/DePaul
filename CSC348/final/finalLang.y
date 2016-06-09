@@ -46,9 +46,13 @@ expr	: BEGIN_P PRINT expr END_P
 	  { 
 	    resultPtr = $$ = new PrintStatement($3);
 	  }
-	| BEGIN_P READ VARIABLE END_P
+    | BEGIN_P PRINT STRING END_P
+      {
+        resultPtr = $$ = new PrintStatement($3);
+      }
+    | BEGIN_P READ END_P
 	  {
-	    resultPtr = $$ = new ReadStatement($3);
+	    resultPtr = $$ = new ReadStatement();
 	  }
 	| BEGIN_P IF expr expr END_P
 	  {
@@ -106,6 +110,10 @@ expr	: BEGIN_P PRINT expr END_P
       {
         resultPtr = $$ = new BinaryOpStatement($3, '!', $4);
       }
+    | BEGIN_P PRINTLN expr END_P
+      {
+        resultPtr = $$ = new PrintLnStatement($3);
+      }
     | BEGIN_P PRINTLN STRING END_P
       {
         resultPtr = $$ = new PrintLnStatement($3);
@@ -117,6 +125,11 @@ expr	: BEGIN_P PRINT expr END_P
     | BEGIN_P UMINUS expr END_P
       {
         resultPtr = $$ = new UnaryOpStatement('-', $3);
+      }
+    | BEGIN_P DO list expr END_P
+      {
+          ((BlockStatement*)$3)->add($4);
+          resultPtr = $$ = $3
       }
     | NUMBER
 	  {

@@ -44,6 +44,7 @@ if			{ return(IF); }
 			  return(VARIABLE);
 			} 
 \+			{ return(PLUS); }
+"- "        { return(UMINUS); }
 \-			{ return(MINUS); }
 \*			{ return(STAR); }
 \/			{ return(SLASH); }
