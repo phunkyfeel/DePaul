@@ -42,9 +42,14 @@ if			{ return(IF); }
 [a-zA-Z_][a-zA-Z_0-9]*	{
 			  yylval.charPtr_ = strdup(yytext);
 			  return(VARIABLE);
-			} 
+			}
+"++"        { return(INCREMENT); }
+"--"        { return(DECREMENT); }
+"+="        { return(PLUSEQUAL); }
+"-="        { return(MINUSEQUAL); }
+"*="        { return(MULTEQUAL); }
+"/="        { return(DIVEQUAL); }
 \+			{ return(PLUS); }
-"- "        { return(UMINUS); }
 \-			{ return(MINUS); }
 \*			{ return(STAR); }
 \/			{ return(SLASH); }

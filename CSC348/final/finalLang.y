@@ -2,6 +2,9 @@
 //  finalLang.y
 //  $ bison --verbose -d --debug finalLang.y
 //  $ gcc finalLang.tab.c -c
+
+//+= operators
+
 #include  "finalLang.h"
 %}
 
@@ -18,10 +21,10 @@
 %token			PRINT READ IF WHILE DO PRINTLN
 %nonassoc		EQUALTO NOTEQUALTO
 %right			EQUAL
-%left			LESS GREATER
-%left			PLUS MINUS
+%left			LESS GREATER INCREMENT DECREMENT
+%left			PLUS MINUS PLUSEQUAL MINUSEQUAL MULTEQUAL DIVEQUAL
 %left			STAR SLASH
-%nonassoc		UMINUS NOT
+%nonassoc       NOT
 %token	<charPtr_>	VARIABLE
 %token	<const_>	NUMBER
 %token	<stringPtr_>	STRING
@@ -110,6 +113,30 @@ expr	: BEGIN_P PRINT expr END_P
       {
         resultPtr = $$ = new BinaryOpStatement($3, '!', $4);
       }
+    | BEGIN_P INCREMENT VARIABLE END_P
+      {
+        
+      }
+    | BEGIN_P DECREMENT VARIABLE END_P
+      {
+    
+      }
+    | BEGIN_P PLUSEQUAL VARIABLE NUMBER END_P
+      {
+    
+      }
+    | BEGIN_P MINUSEQUAL VARIABLE NUMBER END_P
+      {
+    
+      }
+    | BEGIN_P MULTEQUAL VARIABLE NUMBER END_P
+      {
+    
+      }
+    | BEGIN_P DIVEQUAL VARIABLE NUMBER END_P
+      {
+    
+      }
     | BEGIN_P PRINTLN expr END_P
       {
         resultPtr = $$ = new PrintLnStatement($3);
@@ -122,14 +149,14 @@ expr	: BEGIN_P PRINT expr END_P
       {
         resultPtr = $$ = new UnaryOpStatement('!', $3);
       }
-    | BEGIN_P UMINUS expr END_P
+    | BEGIN_P MINUS expr END_P
       {
         resultPtr = $$ = new UnaryOpStatement('-', $3);
       }
     | BEGIN_P DO list expr END_P
       {
           ((BlockStatement*)$3)->add($4);
-          resultPtr = $$ = $3
+          resultPtr = $$ = $3;
       }
     | NUMBER
 	  {

@@ -50,18 +50,23 @@
      NOTEQUALTO = 266,
      EQUALTO = 267,
      EQUAL = 268,
-     GREATER = 269,
-     LESS = 270,
-     MINUS = 271,
-     PLUS = 272,
-     SLASH = 273,
-     STAR = 274,
-     NOT = 275,
-     UMINUS = 276,
-     VARIABLE = 277,
-     NUMBER = 278,
-     STRING = 279,
-     ERROR = 280
+     DECREMENT = 269,
+     INCREMENT = 270,
+     GREATER = 271,
+     LESS = 272,
+     DIVEQUAL = 273,
+     MULTEQUAL = 274,
+     MINUSEQUAL = 275,
+     PLUSEQUAL = 276,
+     MINUS = 277,
+     PLUS = 278,
+     SLASH = 279,
+     STAR = 280,
+     NOT = 281,
+     VARIABLE = 282,
+     NUMBER = 283,
+     STRING = 284,
+     ERROR = 285
    };
 #endif
 /* Tokens.  */
@@ -76,25 +81,30 @@
 #define NOTEQUALTO 266
 #define EQUALTO 267
 #define EQUAL 268
-#define GREATER 269
-#define LESS 270
-#define MINUS 271
-#define PLUS 272
-#define SLASH 273
-#define STAR 274
-#define NOT 275
-#define UMINUS 276
-#define VARIABLE 277
-#define NUMBER 278
-#define STRING 279
-#define ERROR 280
+#define DECREMENT 269
+#define INCREMENT 270
+#define GREATER 271
+#define LESS 272
+#define DIVEQUAL 273
+#define MULTEQUAL 274
+#define MINUSEQUAL 275
+#define PLUSEQUAL 276
+#define MINUS 277
+#define PLUS 278
+#define SLASH 279
+#define STAR 280
+#define NOT 281
+#define VARIABLE 282
+#define NUMBER 283
+#define STRING 284
+#define ERROR 285
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 9 "finalLang.y"
+#line 12 "finalLang.y"
 {
   Statement*	statePtr_;
   char*		charPtr_;
@@ -102,7 +112,7 @@ typedef union YYSTYPE
   std::string*	stringPtr_;
 }
 /* Line 1529 of yacc.c.  */
-#line 106 "finalLang.tab.h"
+#line 116 "finalLang.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
