@@ -1,0 +1,42 @@
+(do (printLn "")
+	(printLn "In this program, you will enter three numbers, and the computer will spit out the min, max and average.")
+	(printLn "")
+	(print "Enter first number: ")
+	(= first (read))
+	(print "Enter second number: ")(= second (read))
+	(print "Enter third number: ")(= third (read))
+	(= total (+ first (+ second third)))
+	(= avg (/ total 3))
+	
+    (if (< first second)(if (< second third)(= min first)))
+	(if (> first second)(if (> second third)(= max first)))
+
+	(if (< second third)(if (< third first)(= min second)))
+	(if (> second third)(if (> third first)(= max second)))
+
+	(if (< third first)(if (< first second)(= min third)))
+	(if (> third first)(if (> first second)(= max third)))
+
+	(if (< first third)(if (< third second)(= min first)))
+	(if (> first third)(if (> third second)(= max first)))
+
+	(if (< third second)(if (< second first)(= min third)))
+	(if (> third second)(if (> second first)(= max third)))
+
+	(if (< second first)(if (< first third)(= min second)))
+	(if (> second first)(if (> first third)(= max second)))
+	
+	(if (== first second)(if (== second third)(= min first)))
+	(if (== first second)(if (== second third)(= max first)))
+	
+	(printLn "")
+	(print "Total:	")
+	(printLn total)
+	(print "Avg:	")
+	(printLn avg)
+	(print "Min:	")
+	(printLn min)
+	(print "Max:	")
+	(printLn max)
+	(printLn "")
+)

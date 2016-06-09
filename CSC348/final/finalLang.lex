@@ -18,18 +18,17 @@ int		ourInput(char* buffer, int maxSize);
 
 %%
 
-[ \t\n]			{ /* ignore whitespace */ }
-"/*"			{
-			  /* ignore comments */
-			  char	first	= yyinput();
-			  char	second	= yyinput();
+[ \t\n\r]   { /* ignore whitespace */ }
+"/*"        { /* ignore comments */
+            char	first	= yyinput();
+            char	second	= yyinput();
+                while  ( (first != '*') && (second != '/') ) {
+                    first	= second;
+                    second	= yyinput();
+                }
+            }
+"//"[^\n]*$ { /*ignore comments*/ }
 
-			  while  ( (first != '*') && (second != '/') )
-			  {
-			    first	= second;
-			    second	= yyinput();
-			  }
-			}
 (\-|\+)?([0-9]+|([0-9]+\.[0-9]*)|([0-9]*\.[0-9]+))      { yylval.const_ = strtod(yytext,NULL); return(NUMBER); }
 print		{ return(PRINT); }
 printLn		{ return(PRINTLN); }

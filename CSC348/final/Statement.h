@@ -88,6 +88,7 @@ public :
 
   ~BlockStatement	()
 		{
+		  //printf("~BlockStatement()\n");
 		  for  (int i = 0; i < list_.size();  i++)
 		    delete(list_[i]);
 		}
@@ -125,6 +126,7 @@ public :
 
   ~AssignStatement	()
 		{
+		  //printf("~AssignStatement()\n");
 		  delete(exprPtr_);
 		  free(varNamePtr_);
 		}
@@ -191,6 +193,7 @@ public :
 
   ~BinaryOpStatement	()
 		{
+		  //printf("~BinaryOpStatement()\n");
 		  delete(rhsPtr_);
 		  delete(lhsPtr_);
 		}
@@ -246,6 +249,7 @@ public :
 
   ~RValVarNameStatement	()
   		{
+		  //printf("~RValVarNameStatement()\n");
 		  free(varNamePtr_);
 		}
 
@@ -320,6 +324,7 @@ public :
 
   ~PrintLnStatement	()
   		{
+		  //printf("~PrintLnStatement()\n");
 		  delete(stringPtr_);
 		  delete(exprPtr_);
 		}

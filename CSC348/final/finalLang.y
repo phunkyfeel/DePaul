@@ -115,27 +115,27 @@ expr	: BEGIN_P PRINT expr END_P
       }
     | BEGIN_P INCREMENT VARIABLE END_P
       {
-        
+        resultPtr = $$ = new AssignStatement(strdup($3), new BinaryOpStatement(new RValVarNameStatement($3), '+', new ConstantStatement(1)));
       }
     | BEGIN_P DECREMENT VARIABLE END_P
       {
-    
+        resultPtr = $$ = new AssignStatement(strdup($3), new BinaryOpStatement(new RValVarNameStatement($3), '-', new ConstantStatement(1)));
       }
-    | BEGIN_P PLUSEQUAL VARIABLE NUMBER END_P
+    | BEGIN_P PLUSEQUAL VARIABLE expr END_P
       {
-    
+        resultPtr = $$ = new AssignStatement(strdup($3), new BinaryOpStatement(new RValVarNameStatement($3), '+', $4));
       }
-    | BEGIN_P MINUSEQUAL VARIABLE NUMBER END_P
+    | BEGIN_P MINUSEQUAL VARIABLE expr END_P
       {
-    
+        resultPtr = $$ = new AssignStatement(strdup($3), new BinaryOpStatement(new RValVarNameStatement($3), '-', $4));
       }
-    | BEGIN_P MULTEQUAL VARIABLE NUMBER END_P
+    | BEGIN_P MULTEQUAL VARIABLE expr END_P
       {
-    
+        resultPtr = $$ = new AssignStatement(strdup($3), new BinaryOpStatement(new RValVarNameStatement($3), '*', $4));
       }
-    | BEGIN_P DIVEQUAL VARIABLE NUMBER END_P
+    | BEGIN_P DIVEQUAL VARIABLE expr END_P
       {
-    
+        resultPtr = $$ = new AssignStatement(strdup($3), new BinaryOpStatement(new RValVarNameStatement($3), '/', $4));
       }
     | BEGIN_P PRINTLN expr END_P
       {
