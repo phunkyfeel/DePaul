@@ -29,6 +29,24 @@
 	(if (== first second)(if (== second third)(= min first)))
 	(if (== first second)(if (== second third)(= max first)))
 	
+	(if (== first second)(if (< second third)(= min first)))
+	(if (== first second)(if (> second third)(= max first)))
+	
+	(if (== first second)(if (< third second)(= min third)))
+	(if (== first second)(if (> third second)(= max third)))
+
+	(if (== first third)(if (< third second)(= min third)))
+	(if (== first third)(if (> third second)(= max third)))
+	
+	(if (== first third)(if (< second third)(= min second)))
+	(if (== first third)(if (> second third)(= max second)))
+
+	(if (== second third)(if (< second first)(= min second)))
+	(if (== second third)(if (> second first)(= max second)))
+
+	(if (== second third)(if (< first second)(= min first)))
+	(if (== second third)(if (> first second)(= max first)))	
+
 	(printLn "")
 	(print "Total:	")
 	(printLn total)
